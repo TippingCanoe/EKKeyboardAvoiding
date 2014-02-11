@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.homepage     = "https://github.com/TippingCanoe/EKKeyboardAvoiding.git"
   s.license      = 'MIT'
   s.author       = { "Evgeniy Kirpichenko" => "evkirpichenko@gmail.com" }
-  s.source       = { :git => "https://github.com/kirpichenko/EKKeyboardAvoiding.git", :tag => "2.0tc" }
+  s.source       = { :git => "https://github.com/TippingCanoe/EKKeyboardAvoiding.git", :tag => "2.0.1tc" }
   s.platform     = :ios, '5.0'
   s.source_files = 'EKKeyboardAvoiding/*.{h,m}'
   s.requires_arc = true
