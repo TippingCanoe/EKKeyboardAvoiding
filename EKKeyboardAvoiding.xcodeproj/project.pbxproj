@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		84EFF62418AAD462007E3D07 /* EKKeyboardAvoiding.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 84EFF62318AAD462007E3D07 /* EKKeyboardAvoiding.podspec */; };
 		D92A33A317F2FA0C0052C93D /* EKAvoidingInsetCalculator.h in Headers */ = {isa = PBXBuildFile; fileRef = D92A33A117F2FA0C0052C93D /* EKAvoidingInsetCalculator.h */; };
 		D92A33A417F2FA0C0052C93D /* EKAvoidingInsetCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = D92A33A217F2FA0C0052C93D /* EKAvoidingInsetCalculator.m */; };
 		D92A33AB17F4246A0052C93D /* ContentInsetsCalculationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D92A33AA17F4246A0052C93D /* ContentInsetsCalculationTest.m */; };
@@ -61,6 +62,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		84EFF62318AAD462007E3D07 /* EKKeyboardAvoiding.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = EKKeyboardAvoiding.podspec; sourceTree = SOURCE_ROOT; };
 		D92A33A117F2FA0C0052C93D /* EKAvoidingInsetCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EKAvoidingInsetCalculator.h; sourceTree = "<group>"; };
 		D92A33A217F2FA0C0052C93D /* EKAvoidingInsetCalculator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EKAvoidingInsetCalculator.m; sourceTree = "<group>"; };
 		D92A33AA17F4246A0052C93D /* ContentInsetsCalculationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContentInsetsCalculationTest.m; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 		D9E868C1171BEC5C00728839 /* EKKeyboardAvoiding */ = {
 			isa = PBXGroup;
 			children = (
+				84EFF62318AAD462007E3D07 /* EKKeyboardAvoiding.podspec */,
 				D9B00DCA183E57D9008D4864 /* EKKeyboardAvoidingProvider */,
 				D9B00DCB183E57F0008D4864 /* EKAvoidingInsetCalculator */,
 				D9B00DCC183E5806008D4864 /* EKKeyboardFrameListener */,
@@ -348,6 +351,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EFF62418AAD462007E3D07 /* EKKeyboardAvoiding.podspec in Resources */,
 				D9F906CB17F2D64D00BDDF5F /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -44,17 +44,18 @@
 
 - (void)startNotificationsObseving
 {
-    [self observeNotificationNamed:UIKeyboardDidChangeFrameNotification
-                            action:@selector(keyboardDidChangeFrame:)];
+    [self observeNotificationNamed:UIKeyboardWillChangeFrameNotification
+                            action:@selector(keyboardWillChangeFrame:)];
 }
 
 #pragma mark - observe keyboard frame
 
-- (void)keyboardDidChangeFrame:(NSNotification *)notification
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
 {
     self.keyboardInfo = [notification userInfo];
     
     NSValue *frameValue = [self.keyboardInfo objectForKey:UIKeyboardFrameEndUserInfoKey];
+    
     if (!CGRectEqualToRect(self.keyboardFrame, [frameValue CGRectValue]))
     {
         self.keyboardFrame = [frameValue CGRectValue];

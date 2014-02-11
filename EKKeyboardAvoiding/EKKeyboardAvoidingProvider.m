@@ -73,7 +73,7 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
 - (void)addExtraContentInset:(UIEdgeInsets)extraContentInset
 {
     UIEdgeInsets currentInset = [self.scrollView contentInset];
-    currentInset.top += extraContentInset.top;
+    currentInset.top += extraContentInset.top + self.scrollView.frame.origin.y;
     currentInset.bottom += extraContentInset.bottom;
     
     [self applyAvoidingContentInset:currentInset];
@@ -90,14 +90,18 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
 
 - (void)applyAvoidingContentInset:(UIEdgeInsets)avoidingInset
 {
-    [[self scrollView] setContentInset:avoidingInset];
-    [[self scrollView] setScrollIndicatorInsets:avoidingInset];
+    
+    NSLog(@"Inset:%@", NSStringFromUIEdgeInsets(avoidingInset));
+    [UIView animateWithDuration:0.2 animations:^{
+        [[self scrollView] setContentInset:avoidingInset];
+        [[self scrollView] setScrollIndicatorInsets:avoidingInset];
+    }];
 }
 
 - (UIEdgeInsets)calculateExtraContentInset
 {
     EKAvoidingInsetCalculator *calculator = [[EKAvoidingInsetCalculator alloc] init];
-
+    
     CGRect keyboardFrame = [self.keyboardListener convertedKeyboardFrameForView:self.scrollView];
     [calculator setKeyboardFrame:keyboardFrame];
     [calculator setScrollViewFrame:[self.scrollView frame]];
@@ -114,7 +118,7 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     if (keyPath == kKeyboardFrameKey)
     {
         [self resetAvoidingContentInset];
-
+        
         UIEdgeInsets newInset = [self calculateExtraContentInset];
         [self addExtraContentInset:newInset];
         [self setExtraContentInset:newInset];
