@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "EKKeyboardAvoiding"
-  s.version      = "2.0tc"
+  s.version      = "2.0.1tc"
   s.summary      = "It's an universal solution that automatically changes content inset of your UIScrollView classes."
   s.homepage     = "https://github.com/TippingCanoe/EKKeyboardAvoiding.git"
   s.license      = 'MIT'
