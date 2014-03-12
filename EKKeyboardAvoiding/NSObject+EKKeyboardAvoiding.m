@@ -8,22 +8,7 @@
 
 #import "NSObject+EKKeyboardAvoiding.h"
 
-#import <objc/runtime.h>
-#import <UIKit/UIKit.h>
-
 @implementation NSObject (EKKeyboardAvoiding)
-
-#pragma mark - associate objects
-
-- (void)associateObject:(id)object forKey:(NSString *)key
-{
-    objc_setAssociatedObject(self, [key UTF8String], object, OBJC_ASSOCIATION_RETAIN);
-}
-
-- (id)associatedObjectForKey:(NSString *)key
-{
-    return objc_getAssociatedObject(self, [key UTF8String]);
-}
 
 #pragma mark - observe notifications
 

@@ -42,6 +42,8 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     if (!self.avoidingStarted)
     {
         [self beginKeyboardFrameObserving];
+        [self beginTextInputObserving];
+        
         [self setAvoidingStarted:YES];
     }
 }
@@ -52,6 +54,8 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     {
         [self resetAvoidingContentInset];
         [self endKeyboardFrameObserving];
+        [self endTextInputObserving];
+        
         [self setAvoidingStarted:NO];
     }
 }
@@ -66,6 +70,16 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
 - (void)endKeyboardFrameObserving
 {
     [[self keyboardListener] removeObserver:self forKeyPath:kKeyboardFrameKey];
+}
+
+- (void)beginTextInputObserving{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputViewWillBeginEditing:) name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textInputViewWillBeginEditing:) name:UITextFieldTextDidBeginEditingNotification object:nil];
+}
+
+- (void)endTextInputObserving{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidBeginEditingNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidBeginEditingNotification object:nil];
 }
 
 #pragma mark - update inset
@@ -90,7 +104,6 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
 
 - (void)applyAvoidingContentInset:(UIEdgeInsets)avoidingInset
 {
-    
     NSLog(@"Inset:%@", NSStringFromUIEdgeInsets(avoidingInset));
     [UIView animateWithDuration:0.2 animations:^{
         [[self scrollView] setContentInset:avoidingInset];
@@ -117,11 +130,36 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
 {
     if (keyPath == kKeyboardFrameKey)
     {
-        [self resetAvoidingContentInset];
         
-        UIEdgeInsets newInset = [self calculateExtraContentInset];
-        [self addExtraContentInset:newInset];
-        [self setExtraContentInset:newInset];
+        if ([self.scrollView window]) {
+            [self resetAvoidingContentInset];
+            
+            UIEdgeInsets newInset = [self calculateExtraContentInset];
+            [self addExtraContentInset:newInset];
+            
+            [self setExtraContentInset:newInset];
+        }
+    }
+}
+
+#pragma mark - observe textfield/textview frame
+
+- (void)textInputViewWillBeginEditing:(NSNotification*)notification
+{
+    UIView *view = notification.object;
+    
+    if ([view isDescendantOfView:self.scrollView]) {
+        
+        CGRect rect = [view convertRect:view.frame toView:self.scrollView];
+        
+        //top of view is above the visible area
+        if (rect.origin.y < (self.scrollView.contentOffset.y + self.scrollView.contentInset.top)) {
+            rect.origin.y-= (rect.size.height + 50);
+        }else{
+            rect.origin.y+=50;
+        }
+        
+        [self.scrollView scrollRectToVisible:rect animated:YES];
     }
 }
 
