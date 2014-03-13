@@ -150,16 +150,23 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     
     if ([view isDescendantOfView:self.scrollView]) {
         
-        CGRect rect = [view convertRect:view.frame toView:self.scrollView];
+        CGRect viewRect = [view convertRect:view.frame toView:self.scrollView];
+        CGRect kbFrame = self.keyboardListener.keyboardFrame;
+        CGRect screenBounds = [UIScreen mainScreen].bounds;
+        CGFloat accessoryViewHeight = view.inputAccessoryView ? view.inputAccessoryView.bounds.size.height : 0;
         
-        //top of view is above the visible area
-        if (rect.origin.y < (self.scrollView.contentOffset.y + self.scrollView.contentInset.top)) {
-            rect.origin.y-= (rect.size.height + 50);
-        }else{
-            rect.origin.y+=50;
+        CGFloat visibleVertical = screenBounds.size.height - ((screenBounds.size.height - kbFrame.origin.y) +accessoryViewHeight + 20);
+        
+        if (viewRect.size.height >= visibleVertical) {
+            viewRect.size.height = visibleVertical;
         }
         
-        [self.scrollView scrollRectToVisible:rect animated:YES];
+        //top of view is very near or above the visible area
+        if ((self.scrollView.contentOffset.y + self.scrollView.contentInset.top - viewRect.origin.y) > -10) {
+            viewRect.origin.y -= self.scrollView.contentInset.top;
+        }
+        
+        [self.scrollView scrollRectToVisible:viewRect animated:YES];
     }
 }
 
