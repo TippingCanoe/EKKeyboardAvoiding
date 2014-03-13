@@ -108,6 +108,11 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     [UIView animateWithDuration:0.2 animations:^{
         [[self scrollView] setContentInset:avoidingInset];
         [[self scrollView] setScrollIndicatorInsets:avoidingInset];
+        
+        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending){
+            CGPoint newOffset = CGPointMake(self.scrollView.contentOffset.x - avoidingInset.left + avoidingInset.right, self.scrollView.contentOffset.y - avoidingInset.top + avoidingInset.bottom);
+            [[self scrollView] setContentOffset:newOffset];
+        }
     }];
 }
 
@@ -162,7 +167,9 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
         }
         
         //top of view is very near or above the visible area
-        if ((self.scrollView.contentOffset.y + self.scrollView.contentInset.top - viewRect.origin.y) > -10) {
+        float diff = self.scrollView.contentOffset.y + self.scrollView.contentInset.top - viewRect.origin.y;
+        
+        if ((fabs(diff) < 10 && fabs(diff) >= 2) || (diff < 0 && diff >= -1.0 * self.scrollView.contentInset.top) ) {
             viewRect.origin.y -= self.scrollView.contentInset.top;
         }
         
