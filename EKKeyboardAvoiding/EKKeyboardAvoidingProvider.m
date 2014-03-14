@@ -166,13 +166,6 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
             viewRect.size.height = visibleVertical;
         }
         
-        //top of view is very near or above the visible area
-        float diff = self.scrollView.contentOffset.y + self.scrollView.contentInset.top - viewRect.origin.y;
-        
-        if ((fabs(diff) < 10 && fabs(diff) >= 2) || (diff < 0 && diff >= -1.0 * self.scrollView.contentInset.top) ) {
-            viewRect.origin.y -= self.scrollView.contentInset.top;
-        }
-        
         [self.scrollView scrollRectToVisible:viewRect animated:YES];
     }
 }
