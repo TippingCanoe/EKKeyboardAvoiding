@@ -108,11 +108,6 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     [UIView animateWithDuration:0.2 animations:^{
         [[self scrollView] setContentInset:avoidingInset];
         [[self scrollView] setScrollIndicatorInsets:avoidingInset];
-        
-        if ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] == NSOrderedAscending){
-            CGPoint newOffset = CGPointMake(self.scrollView.contentOffset.x - avoidingInset.left + avoidingInset.right, self.scrollView.contentOffset.y - avoidingInset.top + avoidingInset.bottom);
-            [[self scrollView] setContentOffset:newOffset];
-        }
     }];
 }
 
@@ -166,7 +161,9 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
             viewRect.size.height = visibleVertical;
         }
         
-        [self.scrollView scrollRectToVisible:viewRect animated:YES];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.scrollView scrollRectToVisible:viewRect animated:YES];
+        });
     }
 }
 
