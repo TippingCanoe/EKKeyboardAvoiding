@@ -29,7 +29,7 @@ static const char* kListenerKey = "KeyboardAvoidingListener";
 {
     if (enabled)
     {
-        [self addKeyboardAvoidingListener];
+        [self setKeyboardAvoidingEnabledWithBump:0];
     }
     else
     {
@@ -37,11 +37,15 @@ static const char* kListenerKey = "KeyboardAvoidingListener";
     }
 }
 
+- (void)setKeyboardAvoidingEnabledWithBump:(CGFloat)bump{
+    [self addKeyboardAvoidingListenerWithBump:bump];
+}
+
 #pragma mark - associate avoiding listener
 
-- (void)addKeyboardAvoidingListener
+- (void)addKeyboardAvoidingListenerWithBump:(CGFloat)bump
 {
-    EKKeyboardAvoidingProvider *listener = [[EKKeyboardAvoidingProvider alloc] initWithScrollView:self];
+    EKKeyboardAvoidingProvider *listener = [[EKKeyboardAvoidingProvider alloc] initWithScrollView:self andVerticalBump:bump];
     [listener setKeyboardListener:[self keyboardFrameListener]];
     [listener startAvoiding];
     

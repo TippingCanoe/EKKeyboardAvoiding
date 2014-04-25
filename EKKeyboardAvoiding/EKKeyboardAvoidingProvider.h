@@ -11,12 +11,16 @@
 
 #import "EKKeyboardFrameListener.h"
 
-@interface EKKeyboardAvoidingProvider : NSObject
+@interface EKKeyboardAvoidingProvider : NSObject{
+    
+    CGFloat bump;
+    CGRect lastRect;
+}
 
 /*! Initializes new keyboard avoiding provider
  \param scrollView ScrollView for that keyboard avoiding will be provided
  */
-- (id)initWithScrollView:(UIScrollView *)scrollView;
+- (id)initWithScrollView:(UIScrollView *)scrollView andVerticalBump:(CGFloat)verticalBump;
 
 /// Starts keyboard avoiding
 - (void)startAvoiding;

@@ -19,5 +19,6 @@
  \params enabled YES if the scrollView should avoid keyboard and NO if it shouldn't
  */
 - (void)setKeyboardAvoidingEnabled:(BOOL)enabled;
+- (void)setKeyboardAvoidingEnabledWithBump:(CGFloat)bump;
 
 @end
