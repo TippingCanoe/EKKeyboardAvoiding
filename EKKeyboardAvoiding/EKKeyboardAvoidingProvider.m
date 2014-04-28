@@ -102,6 +102,8 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     currentInset.top -= self.extraContentInset.top;
     currentInset.bottom -= self.extraContentInset.bottom;
     
+    lastRect = CGRectZero;
+    
     [self applyAvoidingContentInset:currentInset];
 }
 
@@ -153,48 +155,24 @@ static NSString *const kKeyboardFrameKey = @"keyboardFrame";
     
     if ([view isDescendantOfView:self.scrollView]) {
         
-        CGRect viewRect = [view convertRect:view.frame toView:self.scrollView];
-        CGRect kbFrame = self.keyboardListener.keyboardFrame;
-        CGRect screenBounds = [UIScreen mainScreen].bounds;
-        CGFloat accessoryViewHeight = view.inputAccessoryView ? view.inputAccessoryView.bounds.size.height : 0;
-        CGFloat visibleVertical = screenBounds.size.height - ((screenBounds.size.height - kbFrame.origin.y) +accessoryViewHeight + 20);
-        
-        if (viewRect.size.height >= visibleVertical) {
-            viewRect.size.height = MAX(1, visibleVertical);
-        }
-        
-        BOOL goingDown = viewRect.origin.y > lastRect.origin.y;
-        BOOL goingUp = viewRect.origin.y < lastRect.origin.y;
-        
-        lastRect = viewRect;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
-            [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-                
-                CGPoint currentOffset = self.scrollView.contentOffset;
-                
-                [self.scrollView scrollRectToVisible:viewRect animated:NO];
-                
-                CGFloat over = (viewRect.origin.y - (viewRect.size.height + bump));
-                CGFloat bumpVal = 0;
-                
-                if (goingUp && currentOffset.y > over){
-                    bumpVal = bump >= 0 ? -50 : bump;
-                }else if (goingDown && currentOffset.y < over) {
-                    bumpVal = bump;
-                }
-                
-                if (bumpVal != 0) {
-                    CGPoint offset = self.scrollView.contentOffset;
-                    offset.y += bumpVal;
-                    
-                    [self.scrollView setContentOffset:offset animated:NO];
-                }
-                
-            } completion:^(BOOL finished) {
-                
-            }];
+            CGRect viewRect = [view convertRect:view.frame toView:self.scrollView];
+            CGRect kbFrame = self.keyboardListener.keyboardFrame;
+            CGRect screenBounds = [UIScreen mainScreen].bounds;
+            CGFloat currentOffset = self.scrollView.contentOffset.y;
+            
+            CGFloat accessoryViewHeight = view.inputAccessoryView ? view.inputAccessoryView.bounds.size.height : 0;
+            CGFloat visibleVertical = screenBounds.size.height - ((screenBounds.size.height - kbFrame.origin.y) +accessoryViewHeight + 20);
+            
+            CGFloat offScreenBy = viewRect.origin.y - (currentOffset + visibleVertical) + bump;
+            CGPoint newPoint = self.scrollView.contentOffset;
+            
+            if (offScreenBy > 0) {
+                newPoint.y += offScreenBy;
+            }
+            
+            [self.scrollView setContentOffset:newPoint animated:YES];
         });
     }
 }
